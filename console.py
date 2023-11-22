@@ -2,6 +2,7 @@
 """ Console Module """
 import cmd
 import sys
+from datetime import datetime
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -43,7 +44,7 @@ class HBNBCommand(cmd.Cmd):
         """
         _cmd = _cls = _id = _args = ''  # initialize line elements
 
-        # scan for general formating - i.e '.', '(', ')'
+        # scan for general formatting - i.e '.', '(', ')'
         if not ('.' in line and '(' in line and ')' in line):
             return line
 
@@ -58,7 +59,7 @@ class HBNBCommand(cmd.Cmd):
             if _cmd not in HBNBCommand.dot_cmds:
                 raise Exception
 
-            # if parantheses contain arguments, parse them
+            # if paranthesis contain arguments, parse them
             pline = pline[pline.find('(') + 1:pline.find(')')]
             if pline:
                 # partition args: (<id>, [<delim>], [<*args>])
@@ -130,13 +131,27 @@ class HBNBCommand(cmd.Cmd):
 
         """
         """ Create an object of any class"""
-        if not args:
+        split_arg = args.split()
+        if len(split_arg) == 0:
             print("** class name missing **")
             return
-        elif args not in HBNBCommand.classes:
+        
+        class_name = split_arg[0]
+        if class_name not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[args]()
+
+        param_dict = {'created_at': datetime.now().isoformat(),
+                      'updated_at': datetime.now().isoformat(),
+                      '__class__': HBNBCommand.classes[class_name].__name__}
+        param_dict.update(self.__dict__)
+        for param in split_arg[1:]:
+            key, value = param.split('=')
+            value = value.strip('"')
+            key = key.replace('_', ' ')
+            param_dict[key] = value
+
+        new_instance = HBNBCommand.classes[class_name](**param_dict)
         storage.save()
         print(new_instance.id)
         storage.save()
