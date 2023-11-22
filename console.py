@@ -121,7 +121,7 @@ class HBNBCommand(cmd.Cmd):
         cmd syntax: create<class name><param 1><param 2><param 3>...
         param syntax: <key name> = <value>
         Value syntax:
-            String:"<value>" starts with double quotes begin with a \
+            String:"<value>" starts with double quotes begin with a '\''
                    all _ must replace spaces (attribute name)
             Float: <unit>.<decimal> contains a dot
             Integer: <number> default case
@@ -149,9 +149,9 @@ class HBNBCommand(cmd.Cmd):
         new_instance = eval(class_name)()
 
         for i in range(1, len(list)):
-            key, value = tuple(list[i].split('='))
-            if value.startswith('"'):
-                value.strip('"').replace("_", " ")
+            key, value = tuple(list[i].split("="))
+            if value.startswith('"') and value.endswith('"'):
+                value = value.strip('"').replace("_", " ")
             else:
                 try:
                     value = eval(value)
