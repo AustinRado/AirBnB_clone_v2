@@ -1,15 +1,46 @@
 #!/usr/bin/python3
 """This module defines a base class for all models in our hbnb clone"""
-import uuid
-from datetime import datetime
+try:
+    import uuid
+    from datetime import datetime
+    from models import storage
+    from sqlalchemy.ext.declarative import declarative_base
+    from sqlalchemy import Column, String, DATETIME
+except ImportError as e:
+    print(f'Import error', e)
+
+Base = declarative_base()
 
 
-class BaseModel:
+class BaseModel():
+
+    """
+    Attributes
+    id : columns, CHAR(60), Not null, PK
+    created_at : rep col containing datetime, not null,
+                default value = current time (datetime.utnow())
+    updated_at : rep col containing datetime, not null,
+                default value = current time (datetime.utnow())
+    """
+
+    id = Column(String(60),
+                nullable=False,
+                primary_key=True,
+                unique=True)
+
+    created_at = Column(DATETIME,
+                        nullable=False,
+                        default=datetime.utnow())
+
+    updated_at = Column(DATETIME,
+                        nullable=False,
+                        default=datetime.utnow())
+
     """A base class for all hbnb models"""
     def __init__(self, *args, **kwargs):
-        """Instatntiates a new model"""
+        """Instantiates a new model"""
         if not kwargs:
-            from models import storage
+            # from . import storage
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
@@ -29,7 +60,7 @@ class BaseModel:
 
     def save(self):
         """Updates updated_at with current time when instance is changed"""
-        from models import storage
+        # from . import storage
         self.updated_at = datetime.now()
         storage.save()
 
