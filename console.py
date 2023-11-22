@@ -145,7 +145,7 @@ class HBNBCommand(cmd.Cmd):
         # create Place city_id="0001" user_id="0001" name="My_little_house"
         list = args.split(' ')
 
-        #create new instance 
+        # create new instance
         new_instance = eval(class_name)()
 
         for i in range(1, len(list)):
@@ -159,7 +159,7 @@ class HBNBCommand(cmd.Cmd):
                     print(f'*****could not evaluate {value}')
             if hasattr(new_instance, key):
                 setattr(new_instance, key, value)
-        
+
         storage.new(new_instance)
         print(new_instance.id)
         storage.save()
