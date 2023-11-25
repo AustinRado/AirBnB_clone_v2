@@ -30,11 +30,11 @@ class BaseModel():
 
     created_at = Column(DATETIME,
                         nullable=False,
-                        default=datetime.utnow())
+                        default=datetime.utcnow())
 
     updated_at = Column(DATETIME,
                         nullable=False,
-                        default=datetime.utnow())
+                        default=datetime.utcnow())
 
     """A base class for all hbnb models"""
     def __init__(self, *args, **kwargs):
