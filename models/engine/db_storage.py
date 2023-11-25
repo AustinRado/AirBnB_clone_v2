@@ -38,7 +38,8 @@ class DBStorage:
         Intitialise db instance
         """
         self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.format(
-                                      user,password,host,database), pool_pre_ping=True)
+                                      user, password, host, database),
+                                      pool_pre_ping=True)
 
         """If running in test env drop all tables"""
         if hbnb_env == 'test':
@@ -62,3 +63,29 @@ class DBStorage:
                     key = str(class_type.__name__) + "." + str(obj.id)
                     db_obj[key] = obj
         return db_obj
+
+    def new(self, obj):
+        """Adds obj to the current session"""
+        if obj:
+            self.__session.add(obj)
+
+    def save(self):
+        """commit changes of current db session"""
+        self.__session.commit()
+
+    def delete(self, obj=None):
+        """Delete an obj from current session"""
+        if obj is not None:
+            self.__session.delete(obj)
+
+    def reload(self):
+        """create tables in the db and init current db session"""
+        Base.metadata.create_all(self.__engine)
+        session_factory = sessionmaker(bind=self.__engine,
+                                       expire_on_commit=False)
+        Session = scoped_session(session_factory)
+        self.__session = Session()
+
+    def close(self):
+        """close current session"""
+        self.__session.close()
