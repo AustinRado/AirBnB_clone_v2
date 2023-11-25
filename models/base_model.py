@@ -47,7 +47,7 @@ class BaseModel():
 
         else:
             for kwarg in kwargs:
-                if kwarg in ['created_at','updated_at']:
+                if kwarg in ['created_at', 'updated_at']:
                     setattr(self, kwarg, datetime.fromisoformat(kwargs[kwarg]))
                 elif kwarg != '__class__':
                     setattr(self, kwarg, kwargs[kwarg])
@@ -72,9 +72,9 @@ class BaseModel():
                           (str(type(self)).split('.')[-1]).split('\'')[0]})
         for dict in dictionary:
             if type(dictionary[dict]) is datetime:
-                dictionary[dict] =  dictionary[dict].isoformat()
+                dictionary[dict] = dictionary[dict].isoformat()
         if '_sa_instance_state' in dictionary.keys():
-            del(dictionary['_sa_instance_state'])
+            del (dictionary['_sa_instance_state'])
         return dictionary
 
     def delete(self):
