@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 '''
 Server
 -web application must be listening on 0.0.0.0, port 5000
